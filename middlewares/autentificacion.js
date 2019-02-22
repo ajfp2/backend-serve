@@ -5,7 +5,7 @@ var SEED = require('../config/config').SEED;
 // ====================================================
 // Verificar el TOKEN
 //=====================================================
-exports.verificaToken = function(req, res, next) {
+exports.verificaToken22 = function(req, res, next) {
     var token = req.query.token;
     jwt.verify(token, SEED, (err, decoded) => {
         if (err) {
@@ -18,4 +18,27 @@ exports.verificaToken = function(req, res, next) {
         req.usuario = decoded.usuario;
         next();
     });
+}
+
+exports.verificaToken = function(req, res, next) {
+
+    var token = req.query.token;
+
+    jwt.verify(token, SEED, (err, decoded) => {
+
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                mensaje: 'Token incorrecto',
+                errors: err
+            });
+        }
+
+        req.usuario = decoded.usuario;
+
+        next();
+
+
+    });
+
 }
