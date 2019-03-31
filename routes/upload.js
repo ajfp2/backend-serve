@@ -142,7 +142,7 @@ function subirPorTipo(tipo, id, nomArc, res) {
             medico.save((err, medicoActualizado) => {
                 return res.status(200).json({
                     ok: true,
-                    mensaje: 'OK- IMAGEN DEL MEDICO ACUTLAIZADO',
+                    mensaje: 'OK- IMAGEN DEL MEDICO ACUTLAIZADA',
                     medico: medicoActualizado
                 });
             });

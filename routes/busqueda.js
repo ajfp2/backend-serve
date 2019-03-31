@@ -40,9 +40,9 @@ app.get('/coleccion/:tabla/:busqueda', (req, res) => {
 
 });
 
-//===============================================================
-//Busqueda General
-//===============================================================
+// ===============================================================
+// Busqueda General
+// ===============================================================
 app.get('/todo/:busqueda', (req, res) => {
     var buscar = req.params.busqueda;
     var reg = new RegExp(buscar, 'i');
@@ -61,7 +61,7 @@ app.get('/todo/:busqueda', (req, res) => {
 function buscarHospitales(reg) {
     return new Promise((resolve, reject) => {
         Hospital.find({ nombre: reg })
-            .populate('usuario', 'nombre email')
+            .populate('usuario', 'nombre email img')
             .exec((err, hospitales) => {
                 if (err) {
                     reject('ERROR- AL BUSCAR HOSPITALES', err);
@@ -74,10 +74,10 @@ function buscarHospitales(reg) {
 
 function buscarMedicos(reg) {
     return new Promise((resolve, reject) => {
-        Medico.find()
-            .populate('usuario', 'nombre email')
+        Medico.find({ nombre: reg })
+            .populate('usuario', 'nombre email img')
             .populate('hospital')
-            .exec({ nombre: reg }, (err, medicos) => {
+            .exec((err, medicos) => {
                 if (err) {
                     reject('ERROR- AL BUSCAR MEDICOS', err);
                 } else {
@@ -90,7 +90,7 @@ function buscarMedicos(reg) {
 function buscarUsuarios(reg) {
     return new Promise((resolve, reject) => {
 
-        Usuario.find({}, 'nombre email role').or([{ 'nombre': reg }, { 'email': reg }])
+        Usuario.find({}, 'nombre email role img').or([{ 'nombre': reg }, { 'email': reg }])
             .exec((err, users) => {
                 if (err) reject('ERROR- AL BUSCAR USUARIOS', err);
                 else resolve(users);

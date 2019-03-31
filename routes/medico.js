@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Medico.find({}, 'nombre')
+    Medico.find({}, 'nombre img')
         .skip(desde)
         .limit(5)
         .populate('usuario', 'nombre email')
@@ -35,6 +35,40 @@ app.get('/', (req, res) => {
                     medicos: medicos,
                     total: contar
                 });
+            });
+        });
+});
+// ====================================================
+// Obtener un Médico con ID
+//=====================================================
+app.get('/:id', (req, res) => {
+
+  var id = req.params.id;
+  var body = req.body;
+
+    Medico.findById(id)
+        .populate('usuario', 'nombre email')
+        .populate('hospital')
+        .exec((err, medico) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'ERROR- OBTENIENDO EL MEDICO',
+                    errors: err
+                });
+            }
+
+            if(!medico){
+              return res.status(400).json({
+                  ok: false,
+                  mensaje: 'ERROR- OBTENIENDO EL MEDICO',
+                  errors: { message: 'No existe un medico con ese ID'}
+              });
+            }
+
+            res.status(200).json({
+                ok: true,
+                medico: medico,
             });
         });
 });
@@ -106,7 +140,7 @@ app.put('/:id', mdAuth.verificaToken, (req, res) => {
 
             res.status(200).json({
                 ok: true,
-                usuario: medicoSave
+                medico: medicoSave
             });
         });
     });
